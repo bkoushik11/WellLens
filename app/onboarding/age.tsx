@@ -41,61 +41,60 @@ export default function AgeScreen() {
   return (
     <OnboardingLayout>
       <OnboardingProgressBar step={3} totalSteps={9} />
+      <BackButton color="#64748B" style={{ position: 'absolute', top: -24, left: 16, zIndex: 10 }} />
       <View style={styles.innerContent}>
-        <View style={styles.header}>
-          <BackButton color="#64748B" style={styles.backButton} />
+    
+      <View style={styles.content}>
+        <Text style={styles.title}>How old are you?</Text>
+        <Text style={styles.subtitle}>
+          {isAutoCalculated 
+            ? 'We calculated this from your birthday. You can adjust if needed.'
+            : 'This helps us calculate your nutritional needs more accurately'
+          }
+        </Text>
+        <View style={styles.ageContainer}>
+          <LinearGradient
+            colors={['#14B8A6', '#3B82F6']}
+            style={styles.ageCircle}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <View style={styles.ageInnerCircle}>
+              <Animated.Text style={styles.ageDisplay}>
+                {Math.round(age)}
+              </Animated.Text>
+              <Text style={styles.ageLabel}>years old</Text>
+            </View>
+          </LinearGradient>
         </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>How old are you?</Text>
-          <Text style={styles.subtitle}>
-            {isAutoCalculated 
-              ? 'We calculated this from your birthday. You can adjust if needed.'
-              : 'This helps us calculate your nutritional needs more accurately'
-            }
-          </Text>
-          <View style={styles.ageContainer}>
-            <LinearGradient
-              colors={['#14B8A6', '#3B82F6']}
-              style={styles.ageCircle}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
-              <View style={styles.ageInnerCircle}>
-                <Animated.Text style={styles.ageDisplay}>
-                  {Math.round(age)}
-                </Animated.Text>
-                <Text style={styles.ageLabel}>years old</Text>
-              </View>
-            </LinearGradient>
-          </View>
-          <View style={styles.sliderContainer}>
-            <Slider
-              style={styles.slider}
-              minimumValue={18}
-              maximumValue={120}
-              value={age}
-              onValueChange={handleAgeChange}
-              step={1}
-              minimumTrackTintColor="#14B8A6"
-              maximumTrackTintColor="#E2E8F0"
-            />
-            <View style={styles.sliderLabels}>
+        <View style={styles.sliderContainer}>
+          <Slider
+            style={styles.slider}
+            minimumValue={18}
+            maximumValue={120}
+            value={age}
+            onValueChange={handleAgeChange}
+            step={1}
+            minimumTrackTintColor="#14B8A6"
+            maximumTrackTintColor="#E2E8F0"
+          />
+          <View style={styles.sliderLabels}>
               <Text style={styles.sliderLabel}>18</Text>
-              <Text style={styles.sliderLabel}>120</Text>
-            </View>
+            <Text style={styles.sliderLabel}>120</Text>
           </View>
-          {isAutoCalculated && (
-            <View style={styles.autoCalculatedNote}>
-              <Text style={styles.autoCalculatedText}>
-                ✓ Auto-calculated from your birthday
-              </Text>
-            </View>
-          )}
         </View>
-        <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-          <Text style={styles.nextButtonText}>Continue</Text>
-        </TouchableOpacity>
+        {isAutoCalculated && (
+          <View style={styles.autoCalculatedNote}>
+            <Text style={styles.autoCalculatedText}>
+              ✓ Auto-calculated from your birthday
+            </Text>
+          </View>
+        )}
       </View>
+      <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+        <Text style={styles.nextButtonText}>Continue</Text>
+      </TouchableOpacity>
+    </View>
     </OnboardingLayout>
   );
 }
