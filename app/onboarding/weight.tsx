@@ -26,8 +26,8 @@ export default function WeightScreen() {
   const handleExampleSelect = (exampleWeight: string) => {
     const numericWeight = Number(exampleWeight);
     if (!isNaN(numericWeight) && numericWeight > 0) {
-      setWeight(exampleWeight);
-      setSelectedExample(exampleWeight);
+    setWeight(exampleWeight);
+    setSelectedExample(exampleWeight);
     }
   };
 
@@ -69,12 +69,9 @@ export default function WeightScreen() {
 
   return (
     <OnboardingLayout>
+      <BackButton color="#64748B" style={styles.absoluteBackButton} />
       <OnboardingProgressBar step={5} totalSteps={9} />
       <View style={styles.innerContent}>
-        <View style={styles.header}>
-          <BackButton color="#64748B" style={styles.backButton} />
-          {/* Progress bar moved to top via OnboardingProgressBar */}
-        </View>
         <ScrollView
           style={styles.content}
           showsVerticalScrollIndicator={false}
@@ -82,97 +79,97 @@ export default function WeightScreen() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={styles.scrollContent}
         >
-          <Text style={styles.title}>What's your current weight?</Text>
-          <Text style={styles.subtitle}>We'll use this to track your progress</Text>
-          {/* Unit Toggle */}
-          <View style={styles.unitToggleContainer}>
-            <View style={styles.unitToggle}>
-              <TouchableOpacity
-                style={[styles.unitButton, unit === 'kg' && styles.unitButtonActive]}
-                onPress={() => {
-                  setUnit('kg');
-                  setWeight('');
-                  setSelectedExample(null);
-                }}
-              >
+        <Text style={styles.title}>What's your current weight?</Text>
+        <Text style={styles.subtitle}>We'll use this to track your progress</Text>
+        {/* Unit Toggle */}
+        <View style={styles.unitToggleContainer}>
+          <View style={styles.unitToggle}>
+            <TouchableOpacity
+              style={[styles.unitButton, unit === 'kg' && styles.unitButtonActive]}
+              onPress={() => {
+                setUnit('kg');
+                setWeight('');
+                setSelectedExample(null);
+              }}
+            >
                 <Text style={[styles.unitText, unit === 'kg' && styles.unitTextActive]}>
                   Kilograms
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.unitButton, unit === 'lbs' && styles.unitButtonActive]}
-                onPress={() => {
-                  setUnit('lbs');
-                  setWeight('');
-                  setSelectedExample(null);
-                }}
-              >
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.unitButton, unit === 'lbs' && styles.unitButtonActive]}
+              onPress={() => {
+                setUnit('lbs');
+                setWeight('');
+                setSelectedExample(null);
+              }}
+            >
                 <Text style={[styles.unitText, unit === 'lbs' && styles.unitTextActive]}>
                   Pounds
                 </Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
-          {/* Weight Input */}
-          <View style={styles.weightInputContainer}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.weightInput}
-                value={weight}
-                onChangeText={handleWeightChange}
-                keyboardType="decimal-pad"
-                placeholder="0.0"
-                placeholderTextColor="#94A3B8"
-                maxLength={6}
+        </View>
+        {/* Weight Input */}
+        <View style={styles.weightInputContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.weightInput}
+              value={weight}
+              onChangeText={handleWeightChange}
+              keyboardType="decimal-pad"
+              placeholder="0.0"
+              placeholderTextColor="#94A3B8"
+              maxLength={6}
                 returnKeyType="done"
-              />
-              <Text style={styles.unitLabel}>{unit}</Text>
-            </View>
+            />
+            <Text style={styles.unitLabel}>{unit}</Text>
           </View>
-          {/* Example Weights Section */}
-          <View style={styles.examplesSection}>
-            <Text style={styles.examplesTitle}>Quick Select</Text>
+        </View>
+        {/* Example Weights Section */}
+        <View style={styles.examplesSection}>
+          <Text style={styles.examplesTitle}>Quick Select</Text>
             <Text style={styles.examplesSubtitle}>
               Choose from common weights or enter your own above
             </Text>
-            <View style={styles.examplesContainer}>
-              {getExampleWeights().map((exampleWeight, index) => (
-                <TouchableOpacity
+          <View style={styles.examplesContainer}>
+            {getExampleWeights().map((exampleWeight, index) => (
+              <TouchableOpacity
                   key={`${exampleWeight}-${index}`}
-                  style={[
-                    styles.exampleButton,
-                    selectedExample === exampleWeight && styles.exampleButtonSelected
-                  ]}
-                  onPress={() => handleExampleSelect(exampleWeight)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={[
-                    styles.exampleWeight,
-                    selectedExample === exampleWeight && styles.exampleWeightSelected
-                  ]}>
-                    {exampleWeight}
-                  </Text>
-                  <Text style={[
-                    styles.exampleUnit,
-                    selectedExample === exampleWeight && styles.exampleUnitSelected
-                  ]}>
-                    {unit}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                style={[
+                  styles.exampleButton,
+                  selectedExample === exampleWeight && styles.exampleButtonSelected
+                ]}
+                onPress={() => handleExampleSelect(exampleWeight)}
+                activeOpacity={0.7}
+              >
+                <Text style={[
+                  styles.exampleWeight,
+                  selectedExample === exampleWeight && styles.exampleWeightSelected
+                ]}>
+                  {exampleWeight}
+                </Text>
+                <Text style={[
+                  styles.exampleUnit,
+                  selectedExample === exampleWeight && styles.exampleUnitSelected
+                ]}>
+                  {unit}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
-        </ScrollView>
-        <TouchableOpacity
-          style={[styles.nextButton, !weight && styles.nextButtonDisabled]}
-          onPress={handleNext}
-          disabled={!weight}
-        >
-          <Text style={[styles.nextButtonText, !weight && styles.nextButtonTextDisabled]}>
-            Continue
-          </Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </ScrollView>
+      <TouchableOpacity
+        style={[styles.nextButton, !weight && styles.nextButtonDisabled]}
+        onPress={handleNext}
+        disabled={!weight}
+      >
+        <Text style={[styles.nextButtonText, !weight && styles.nextButtonTextDisabled]}>
+          Continue
+        </Text>
+      </TouchableOpacity>
+    </View>
     </OnboardingLayout>
   );
 }
@@ -232,13 +229,15 @@ const styles = StyleSheet.create({
     color: '#1E293B',
     textAlign: 'center',
     marginBottom: 8,
+    marginTop: 24,
   },
   subtitle: {
     fontSize: 16,
     color: '#64748B',
     textAlign: 'center',
     lineHeight: 22,
-    marginBottom: 48,
+    marginBottom: 32,
+    marginTop: 12,
   },
   unitToggleContainer: {
     alignItems: 'center',
@@ -367,5 +366,11 @@ const styles = StyleSheet.create({
   },
   nextButtonTextDisabled: {
     color: '#94A3B8',
+  },
+  absoluteBackButton: {
+    position: 'absolute',
+    top: -22,
+    left: 8,
+    zIndex: 10,
   },
 });
