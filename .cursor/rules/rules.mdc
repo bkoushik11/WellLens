@@ -1,0 +1,350 @@
+---
+alwaysApply: true
+# WellLens Design System Rules
+## Agent: WellLens_DesignSystem
+## Apply: Always
+
+### Color System
+/* Primary Palette /
+--primary-green: #14B8A6 / buttons, accents, progress /
+--primary-blue: #3B82F6 / secondary gradients /
+--background: #FFFFFF / pure white backgrounds /
+--text-primary: #1E293B / dark slate headings /
+--text-secondary: #64748B / slate subtitles /
+--text-disabled: #94A3B8 / light slate disabled /
+--progress-bg: #E2E8F0 / unfilled progress */
+
+/* Gradient Combinations /
+--hero-gradient: linear-gradient(135deg, #14B8A6, #3B82F6)
+--circle-gradient: linear-gradient(135deg, #14B8A6, #3B82F6)
+/ Note: Use solid #14B8A6 for buttons, gradients for decoration only */
+
+text
+
+### Typography Scale
+/* Screen Titles */
+.title {
+font-size: 28px;
+font-weight: bold;
+color: var(--text-primary);
+text-align: center;
+margin-bottom: 8px;
+}
+
+/* Subtitles/Descriptions */
+.subtitle {
+font-size: 16px;
+color: var(--text-secondary);
+text-align: center;
+line-height: 22px;
+margin-bottom: 32px;
+}
+
+/* Body Text */
+.body {
+font-size: 16px;
+color: var(--text-primary);
+line-height: 24px;
+}
+
+/* Small Text/Captions */
+.caption {
+font-size: 12px;
+color: var(--text-secondary);
+font-weight: 500;
+}
+
+/* Button Text */
+.button-text {
+font-size: 16-18px;
+font-weight: 600;
+color: #FFFFFF;
+}
+
+text
+
+### Layout System
+/* Container Structure */
+.container {
+flex: 1;
+background-color: var(--background);
+padding-top: 50px;
+}
+
+/* Content Padding /
+.content {
+padding-horizontal: 24px; / consistent across all screens */
+}
+
+.section {
+margin-bottom: 32px; /* standard section spacing */
+}
+
+/* Progress Bar Positioning /
+.progress-container {
+width: 240px;
+height: 8px;
+border-radius: 4px;
+/ Always centered in header with back button on left */
+}
+
+.step-indicator {
+font-size: 12px;
+color: var(--text-secondary);
+/* Format: "Step X of Y" */
+}
+
+text
+
+### Button Standards
+/* Primary Buttons /
+.button-primary {
+background-color: var(--primary-green);
+padding: 16px 24px;
+border-radius: 12px;
+align-items: center;
+min-width: 44px; / minimum touch target */
+min-height: 44px;
+}
+
+.button-primary:disabled {
+background-color: var(--progress-bg);
+}
+
+.button-primary:disabled .text {
+color: var(--text-disabled);
+}
+
+/* Secondary/Select Buttons /
+.button-secondary {
+background-color: var(--primary-green);
+padding: 12px 32px;
+border-radius: 8px; / smaller radius for secondary */
+}
+
+text
+
+### Card Components
+/* Selection Cards /
+.selection-card {
+background-color: var(--background);
+border-radius: 12px;
+padding: 16px;
+border: 2px solid var(--progress-bg); / unselected */
+
+/* Subtle shadow */
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.selection-card.selected {
+border-color: var(--primary-green);
+}
+
+/* Card Content Layout /
+.card-content {
+/ Icon + Text with consistent spacing /
+/ Center alignment for icon and label /
+/ Use Lucide icons: size 24, color var(--primary-green) */
+}
+
+text
+
+### Input Fields
+/* Text Inputs */
+.text-input {
+background-color: #F8FAFC;
+border-radius: 12px;
+padding: 16px 20px;
+border: 1px solid var(--progress-bg);
+font-size: 16px;
+color: var(--text-primary);
+}
+
+.text-input:focus {
+border-color: var(--primary-green);
+}
+
+/* Numeric Inputs /
+.numeric-display {
+font-size: 24-32px;
+font-weight: bold;
+color: var(--primary-green);
+text-align: center;
+/ Use with circular or gradient backgrounds */
+}
+
+text
+
+### Navigation & Progress
+/* Header Structure */
+.header {
+flex-direction: row;
+align-items: center;
+padding: 0 24px 32px;
+}
+
+/* Back Button /
+.back-button {
+padding: 8px;
+margin-right: 16px;
+/ ChevronLeft icon: size 24, color var(--text-secondary) */
+}
+
+/* Progress Bar */
+.progress-bar {
+width: 240px;
+height: 8px;
+background-color: var(--progress-bg);
+}
+
+.progress-fill {
+background-color: var(--primary-green);
+/* Dynamic width based on step */
+}
+
+text
+
+### Modal Standards
+/* iOS Modals */
+.modal-ios {
+transparent: true;
+animation-type: slide;
+presentation-style: overFullScreen;
+}
+
+.modal-overlay {
+background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+background-color: var(--background);
+border-top-left-radius: 20px;
+border-top-right-radius: 20px;
+}
+
+.modal-header .cancel {
+color: #6B7280;
+}
+
+.modal-header .done {
+color: var(--primary-green);
+}
+
+/* Android Pickers /
+/ Use native picker styling with maximumDate constraints /
+/ Consistent onChange handling across platforms */
+
+text
+
+### Accessibility Rules
+/* Touch Targets /
+.interactive {
+min-width: 44px;
+min-height: 44px;
+/ Minimum 8px spacing between clickable items */
+}
+
+/* Contrast Requirements /
+/ Ensure WCAG AA compliance (4.5:1 ratio) /
+/ Test all text/background combinations */
+
+/* Screen Reader Support /
+/ Add accessibilityLabel for all interactive elements /
+/ Use accessibilityHint for complex interactions /
+/ Proper heading hierarchy with accessibilityRole */
+
+text
+
+### Animation Standards
+/* Standard Transitions /
+/ Use React Native Reanimated for 60fps animations */
+
+.button-press {
+transform: scale(0.95);
+duration: 100ms;
+}
+
+.modal-entrance {
+/* Slide from bottom with spring animation */
+}
+
+.progress-update {
+/* Smooth width transitions over 300ms */
+}
+
+/* Loading States */
+.loading-spinner {
+color: var(--primary-green);
+}
+
+text
+
+### Cultural Sensitivity
+/* Inclusive Design /
+/ Support RTL layouts for Arabic/Hebrew users /
+/ Use culturally neutral icons and imagery /
+/ Avoid region-specific color meanings /
+/ Flexible text containers: 30% translation buffer */
+
+/* Dietary Representations /
+/ Use inclusive food imagery across cultures /
+/ Avoid bias toward specific cuisines /
+/ Support international units (kg/lbs, cm/ft) */
+
+text
+
+### Error Handling
+/* Error States /
+.error {
+color: #EF4444; / red accent for errors */
+}
+
+.toast-error {
+background-color: #FEF2F2;
+border-color: #FECACA;
+}
+
+.toast-success {
+background-color: #F0FDF4;
+color: #22C55E;
+}
+
+/* Loading States /
+/ Skeleton placeholders matching content structure /
+/ Prevent multiple button taps during async operations /
+/ Clear visual feedback for all user actions */
+
+# ✅ Onboarding & Profile Flow Improvements
+
+<!-- Progress Bar Centering -->
+## 1. Progress Bar Centered on All Onboarding Screens
+- The progress bar is now placed **above the header/back button** and is always centered at the top of each onboarding screen.
+- This ensures a consistent, mobile-friendly look and fixes the issue where the progress bar was previously aligned to the right.
+
+---
+
+<!-- Account Info Data Fetching -->
+## 2. Onboarding Details in Account Info
+- The `account-info.tsx` screen uses the `useUserData` hook, which fetches the latest onboarding/profile data from Supabase.
+- When a user logs in, their onboarding details (name, age, weight, etc.) are **automatically retrieved from the database** and displayed in the account info screen.
+- No further code changes are needed here; your implementation is already correct.
+
+---
+
+<!-- Onboarding Skip Logic -->
+## 3. Skip Onboarding for Returning Users
+- The logic in `app/index.tsx` checks if the user is logged in and if onboarding is complete:
+  - If onboarding is complete, the user is sent directly to the main app (`/(tabs)`).
+  - If not, the user is sent to the onboarding flow.
+- This ensures that after the first login/signup, users will not see onboarding again unless needed.
+
+---
+
+<!-- Final Summary -->
+## Summary
+- The progress bar is always centered at the top of onboarding screens.
+- Account info is always fetched from Supabase and shown after login.
+- Returning users are routed directly to the main app, not onboarding.
+
+> **Your onboarding and profile experience is now robust and user-friendly!**
+> If you need this pattern applied to more screens, or want further improvements, just let me know!
