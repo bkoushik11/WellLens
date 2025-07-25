@@ -4,8 +4,12 @@ import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useOnboarding } from '../../hooks/OnboardingContext';
-import OnboardingProgressBar from './OnboardingProgressBar';
+// To ensure the date picker is always visible on iOS, add the following to Info.plist:
+// <key>UIUserInterfaceStyle</key>
+// <string>Light</string>
+import { LinearGradient } from 'expo-linear-gradient';
 import BackButton from './BackButton';
+import OnboardingProgressBar from './OnboardingProgressBar';
 
 export default function BirthdayScreen() {
   const colorScheme = useColorScheme();
@@ -70,23 +74,24 @@ export default function BirthdayScreen() {
 
   return (
     <View style={styles.safeArea}>
-      <View style={styles.topRow}>
-        <BackButton color={colors.textSecondary} style={styles.backButton} />
-        <View style={styles.progressBarContainer}>
-          <OnboardingProgressBar step={2} totalSteps={9} />
-        </View>
+      <BackButton color={colors.textSecondary} style={styles.absoluteBackButton} />
+      <View style={styles.progressBarMargin}>
+        <OnboardingProgressBar step={2} totalSteps={9} />
       </View>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={styles.innerContent}>
+          <View style={styles.header}>
+            {/* BackButton is now absolute positioned */}
+          </View>
           <View style={styles.content}>
-            <Text style={[styles.title, { color: colors.textPrimary }]}>What is your birthday?</Text>
+            <Text style={[styles.title, { color: colors.textPrimary }]} numberOfLines={1} ellipsizeMode="tail">What is your birthday?</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>This helps us personalize your experience</Text>
             <View style={styles.birthdayContainer}>
-              <View style={styles.birthdayInnerCircle}> 
-                <Text style={[styles.birthdayDisplay, { color: colorScheme === 'dark' ? '#fff' : '#14B8A6' }]}> 
+              <View style={[styles.birthdayRectangle, { backgroundColor: colorScheme === 'dark' ? '#FFFFFF' : colors.cardBackground, borderColor: colorScheme === 'dark' ? '#14B8A6' : colors.dateDisplay }]}> 
+                <Text style={[styles.birthdayDisplay, { color: colorScheme === 'dark' ? '#14B8A6' : '#14B8A6' }]}> 
                   {date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                 </Text>
               </View>
@@ -147,16 +152,16 @@ export default function BirthdayScreen() {
               />
             )}
           </View>
-          <TouchableOpacity
-            style={[styles.nextButton, !selected && styles.nextButtonDisabled]}
-            onPress={handleNext}
-            disabled={!selected}
-          >
-            <Text style={[styles.nextButtonText, !selected && styles.nextButtonTextDisabled]}>
-              Continue
-            </Text>
-          </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          style={[styles.nextButton, !selected && styles.nextButtonDisabled]}
+          onPress={handleNext}
+          disabled={!selected}
+        >
+          <Text style={[styles.nextButtonText, !selected && styles.nextButtonTextDisabled]}>
+            Continue
+          </Text>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
@@ -174,12 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     width: '100%',
     paddingHorizontal: 8,
-  },
-  progressBarContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 0,
+    justifyContent: 'space-between',
   },
   container: {
     flex: 1,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: '100%',
     paddingHorizontal: 24,
-    paddingTop: 16,
+    paddingTop: 56, // Increased from 16 to 56 for more space at the top
   },
   header: {
     flexDirection: 'row',
@@ -208,11 +208,11 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: 8,
+    marginTop: 32, // Increased from 8 to 32 for more space below the progress bar
     marginBottom: 0,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#1E293B',
     textAlign: 'center',
@@ -229,28 +229,18 @@ const styles = StyleSheet.create({
   },
   birthdayContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
     marginBottom: 32,
   },
-  birthdayInnerCircle: {
-    minWidth: 180,
-    minHeight: 60,
+  birthdayRectangle: {
+    minWidth: 220,
+    minHeight: 56,
     borderRadius: 12,
-    backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: '#14B8A6',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    marginTop: 8,
     marginBottom: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
-    alignSelf: 'center',
   },
   birthdayDisplay: {
     fontSize: 22,
@@ -316,7 +306,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     marginBottom: 32,
-    width: 'auto',
   },
   nextButtonDisabled: {
     backgroundColor: '#E2E8F0',
@@ -328,5 +317,25 @@ const styles = StyleSheet.create({
   },
   nextButtonTextDisabled: {
     color: '#94A3B8',
+  },
+  bottomButtonContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#fff',
+    paddingBottom: 24,
+    paddingTop: 8,
+  },
+  absoluteBackButton: {
+    position: 'absolute',
+    top: 24,
+    left: 16,
+    zIndex: 10,
+  },
+  progressBarMargin: {
+    marginTop: 48,
+    marginBottom: 0,
+    alignSelf: 'center',
   },
 });
