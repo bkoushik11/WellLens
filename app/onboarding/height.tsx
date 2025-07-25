@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronLeft } from 'lucide-react-native';
-import { useOnboarding } from '../../hooks/OnboardingContext';
-import OnboardingLayout from './OnboardingLayout';
-import OnboardingProgressBar from './OnboardingProgressBar';
 import BackButton from './BackButton';
+import OnboardingProgressBar from './OnboardingProgressBar';
+import { useOnboarding } from '../../hooks/OnboardingContext';
 
 export default function HeightScreen() {
   const [heightCm, setHeightCm] = useState('');
@@ -48,14 +46,19 @@ export default function HeightScreen() {
   };
 
   return (
-    <OnboardingLayout>
-      <OnboardingProgressBar step={4} totalSteps={9} />
-      <View style={styles.innerContent}>
-        <View style={styles.header}>
-          <BackButton color="#64748B" style={styles.backButton} />
-        </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>What's your height?</Text>
+    <View style={styles.safeArea}>
+      <BackButton color="#64748B" style={styles.absoluteBackButton} />
+      <View style={styles.progressBarMargin}>
+        <OnboardingProgressBar step={4} totalSteps={9} />
+      </View>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <View style={styles.innerContent}>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+            What's your height?
+          </Text>
           <Text style={styles.subtitle}>We'll use this to personalize your experience</Text>
           <View style={styles.unitToggleContainer}>
             <TouchableOpacity
@@ -82,22 +85,38 @@ export default function HeightScreen() {
             </TouchableOpacity>
           </View>
           {unit === 'cm' ? (
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.heightInput}
-                value={heightCm}
-                onChangeText={setHeightCm}
-                keyboardType="decimal-pad"
-                placeholder="cm"
-                placeholderTextColor="#94A3B8"
-                maxLength={6}
-                returnKeyType="done"
-              />
-              <Text style={styles.unitLabel}>cm</Text>
+            <View>
+              <View style={styles.inputRow}>
+                <TextInput
+                  style={styles.heightInput}
+                  value={heightCm}
+                  onChangeText={setHeightCm}
+                  keyboardType="decimal-pad"
+                  placeholder="cm"
+                  placeholderTextColor="#94A3B8"
+                  maxLength={6}
+                  returnKeyType="done"
+                />
+                <Text style={styles.unitLabel}>cm</Text>
+              </View>
+              <View style={styles.examplesSection}>
+                <Text style={styles.examplesTitle}>Examples:</Text>
+                <View style={styles.examplesContainer}>
+                  {['130', '140', '150'].map((ex) => (
+                    <TouchableOpacity
+                      key={ex}
+                      style={styles.exampleButton}
+                      onPress={() => setHeightCm(ex)}
+                    >
+                      <Text style={styles.exampleText}>{ex} cm</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
             </View>
           ) : (
-            <View style={styles.dualInputContainer}>
-              <View style={styles.inputGroup}>
+            <View>
+              <View style={styles.inputRow}>
                 <TextInput
                   style={styles.heightInput}
                   value={feet}
@@ -109,8 +128,6 @@ export default function HeightScreen() {
                   returnKeyType="next"
                 />
                 <Text style={styles.unitLabel}>ft</Text>
-              </View>
-              <View style={styles.inputGroup}>
                 <TextInput
                   style={styles.heightInput}
                   value={inches}
@@ -123,71 +140,83 @@ export default function HeightScreen() {
                 />
                 <Text style={styles.unitLabel}>in</Text>
               </View>
+              <View style={styles.examplesSection}>
+                <Text style={styles.examplesTitle}>Examples:</Text>
+                <View style={styles.examplesContainer}>
+                  {[
+                    { ft: '4', in: '7', label: `4'7"` },
+                    { ft: '5', in: '3', label: `5'3"` },
+                    { ft: '5', in: '11', label: `5'11"` },
+                  ].map((ex) => (
+                    <TouchableOpacity
+                      key={ex.label}
+                      style={styles.exampleButton}
+                      onPress={() => { setFeet(ex.ft); setInches(ex.in); }}
+                    >
+                      <Text style={styles.exampleText}>{ex.label}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
             </View>
           )}
         </View>
-        <TouchableOpacity
-          style={[styles.nextButton, ((unit === 'cm' && !heightCm) || (unit === 'ft/inches' && (!feet && !inches))) && styles.nextButtonDisabled]}
-          onPress={handleNext}
-          disabled={(unit === 'cm' && !heightCm) || (unit === 'ft/inches' && (!feet && !inches))}
-        >
-          <Text style={[styles.nextButtonText, ((unit === 'cm' && !heightCm) || (unit === 'ft/inches' && (!feet && !inches))) && styles.nextButtonTextDisabled]}>
-            Continue
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </OnboardingLayout>
+      </KeyboardAvoidingView>
+      <TouchableOpacity
+        style={[
+          styles.nextButton,
+          ((unit === 'cm' && !heightCm) || (unit === 'ft/inches' && (!feet && !inches))) && styles.nextButtonDisabled,
+        ]}
+        onPress={handleNext}
+        disabled={(unit === 'cm' && !heightCm) || (unit === 'ft/inches' && (!feet && !inches))}
+      >
+        <Text style={[
+          styles.nextButtonText,
+          ((unit === 'cm' && !heightCm) || (unit === 'ft/inches' && (!feet && !inches))) && styles.nextButtonTextDisabled,
+        ]}>
+          Continue
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  absoluteBackButton: {
+    position: 'absolute',
+    top: 24,
+    left: 16,
+    zIndex: 10,
+  },
+  progressBarMargin: {
+    marginTop: 48,
+    marginBottom: 0,
+    alignSelf: 'center',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingTop: 0,
+  },
   innerContent: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'flex-start',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingBottom: 32,
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 16,
-  },
-  progressContainer: {
     width: '100%',
-    alignItems: 'center',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  progressBar: {
-    width: 240,
-    height: 8,
-    backgroundColor: '#E2E8F0',
-    borderRadius: 4,
-    marginBottom: 4,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#14B8A6',
-    borderRadius: 4,
-  },
-  progressText: {
-    fontSize: 12,
-    color: '#64748B',
-    fontWeight: '500',
-  },
-  content: {
-    flex: 1,
     paddingHorizontal: 24,
+    paddingTop: 56,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#1E293B',
     textAlign: 'center',
     marginBottom: 8,
+    width: '100%',
   },
   subtitle: {
     fontSize: 16,
@@ -195,148 +224,68 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 32,
+    width: '100%',
   },
   unitToggleContainer: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  unitToggle: {
     flexDirection: 'row',
-    backgroundColor: '#F1F5F9',
-    borderRadius: 12,
-    padding: 4,
-    width: 200,
+    justifyContent: 'center',
+    marginBottom: 24,
+    marginTop: 8,
   },
   unitButton: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
     borderRadius: 8,
-    alignItems: 'center',
+    backgroundColor: '#F1F5F9',
+    marginHorizontal: 4,
   },
   unitButtonActive: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    backgroundColor: '#14B8A6',
   },
   unitText: {
     fontSize: 16,
-    fontWeight: '500',
     color: '#64748B',
+    fontWeight: '500',
   },
   unitTextActive: {
-    color: '#14B8A6',
-    fontWeight: '600',
+    color: '#fff',
+    fontWeight: '700',
   },
-  inputContainer: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: '#E2E8F0',
-    padding: 20,
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 32,
-  },
-  inputHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  inputHeaderText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1E293B',
-    marginLeft: 8,
-  },
-  dualInputContainer: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  inputGroup: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    marginTop: 8,
   },
   heightInput: {
-    flex: 1,
+    width: 90,
     paddingVertical: 16,
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#1E293B',
     textAlign: 'center',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    marginHorizontal: 8,
   },
   unitLabel: {
     fontSize: 16,
     color: '#64748B',
     fontWeight: '500',
-    marginLeft: 8,
-  },
-  singleInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-  },
-  heightInputLarge: {
-    flex: 1,
-    paddingVertical: 20,
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1E293B',
-    textAlign: 'center',
-  },
-  unitLabelLarge: {
-    fontSize: 20,
-    color: '#64748B',
-    fontWeight: '500',
-    marginLeft: 12,
-  },
-  examplesSection: {
-    marginBottom: 32,
-  },
-  examplesTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1E293B',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  examplesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  exampleButton: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  exampleText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#14B8A6',
+    marginHorizontal: 4,
   },
   nextButton: {
     backgroundColor: '#14B8A6',
-    marginHorizontal: 24,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
     marginBottom: 32,
+    marginTop: 8,
+    marginHorizontal: 24,
+    alignSelf: 'stretch',
   },
   nextButtonDisabled: {
     backgroundColor: '#E2E8F0',
@@ -348,5 +297,45 @@ const styles = StyleSheet.create({
   },
   nextButtonTextDisabled: {
     color: '#94A3B8',
+  },
+  examplesSection: {
+    marginBottom: 24,
+  },
+  examplesTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1E293B',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  examplesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#F1F5F9',
+    borderRadius: 16,
+    padding: 20,
+    marginHorizontal: 0,
+    marginTop: 8,
+    width: 360,
+    maxWidth: '99%',
+    alignSelf: 'center',
+  },
+  exampleButton: {
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 16,
+    paddingVertical: 20,
+    marginHorizontal: 4,
+    alignItems: 'center',
+    width: 90,
+    minHeight: 56,
+    justifyContent: 'center',
+    flex: 0,
+  },
+  exampleText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#14B8A6',
   },
 });
