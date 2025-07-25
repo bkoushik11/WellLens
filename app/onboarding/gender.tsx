@@ -25,28 +25,28 @@ export default function GenderScreen() {
 
   return (
     <OnboardingLayout>
+      <BackButton color="#64748B" style={styles.absoluteBackButton} />
       <OnboardingProgressBar step={6} totalSteps={9} />
       <View style={styles.innerContent}>
-        <View style={styles.header}>
-          <BackButton color="#64748B" style={styles.backButton} />
-        </View>
         <View style={styles.content}>
           <Text style={styles.title}>What's your gender?</Text>
           <Text style={styles.subtitle}>This helps us personalize your experience</Text>
           <View style={styles.genderContainer}>
             <TouchableOpacity
-              style={[styles.genderCard, selectedGender === 'male' && styles.genderCardSelected]}
+              style={[styles.genderCard, selectedGender === 'male' && { backgroundColor: '#3B82F6', borderColor: '#3B82F6' }]}
               onPress={() => setSelectedGender('male')}
               activeOpacity={0.7}
             >
-              <Text style={styles.genderText}>Male</Text>
+              <Text style={{ fontSize: 36, marginBottom: 8 }}>👨</Text>
+              <Text style={[styles.genderText, selectedGender === 'male' && { color: '#fff' }]}>Male</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.genderCard, selectedGender === 'female' && styles.genderCardSelected]}
+              style={[styles.genderCard, selectedGender === 'female' && { backgroundColor: '#EC4899', borderColor: '#EC4899' }]}
               onPress={() => setSelectedGender('female')}
               activeOpacity={0.7}
             >
-              <Text style={styles.genderText}>Female</Text>
+              <Text style={{ fontSize: 36, marginBottom: 8 }}>👩</Text>
+              <Text style={[styles.genderText, selectedGender === 'female' && { color: '#fff' }]}>Female</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -214,6 +214,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#334155',
+  },
+  absoluteBackButton: {
+    position: 'absolute',
+    top: -23,
+    left: 14,
+    zIndex: 10,
   },
 });
   
