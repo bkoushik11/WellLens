@@ -36,16 +36,14 @@ export default function ActivityScreen() {
       ...onboardingData,
       activity_level: selectedLevel,
     });
-    router.push('/onboarding/diet');
+      router.push('/onboarding/diet');
   };
 
   return (
     <OnboardingLayout>
+      <BackButton color="#64748B" style={styles.absoluteBackButton} />
       <OnboardingProgressBar step={8} totalSteps={9} />
       <View style={styles.innerContent}>
-        <View style={styles.header}>
-          <BackButton color="#64748B" style={styles.backButton} />
-        </View>
         <ScrollView
           style={styles.content}
           showsVerticalScrollIndicator={false}
@@ -53,52 +51,52 @@ export default function ActivityScreen() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: 32 }}
         >
-          <Text style={styles.title}>What's your activity level?</Text>
-          <Text style={styles.subtitle}>This helps us calculate your daily calorie needs</Text>
-          <View style={styles.levelsContainer}>
-            {activityLevels.map((level) => {
-              const Icon = level.icon;
-              return (
-                <TouchableOpacity
-                  key={level.id}
-                  style={[
-                    styles.levelCard,
-                    selectedLevel === level.id && styles.levelCardSelected,
-                    { backgroundColor: level.bgColor }
-                  ]}
-                  onPress={() => setSelectedLevel(level.id)}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.iconContainer}>
-                    <View style={[styles.iconCircle, { backgroundColor: level.color }]}> 
-                      <Icon size={24} color="#FFFFFF" />
-                    </View>
-                    <View style={[styles.multiplierBadge, { backgroundColor: level.color }]}> 
-                      <Text style={styles.multiplierText}>{level.multiplier}</Text>
-                    </View>
-                  </View>
-                  <Text style={[styles.levelTitle, { color: level.color }]}>{level.title}</Text>
-                  <Text style={styles.levelDescription}>{level.description}</Text>
-                  {selectedLevel === level.id && (
-                    <View style={[styles.selectedIndicator, { backgroundColor: level.color }]}> 
-                      <Text style={styles.checkmark}>✓</Text>
-                    </View>
-                  )}
-                </TouchableOpacity>
+        <Text style={styles.title}>What's your activity level?</Text>
+        <Text style={styles.subtitle}>This helps us calculate your daily calorie needs</Text>
+        <View style={styles.levelsContainer}>
+          {activityLevels.map((level) => {
+            const Icon = level.icon;
+            return (
+            <TouchableOpacity
+              key={level.id}
+              style={[
+                styles.levelCard,
+                selectedLevel === level.id && styles.levelCardSelected,
+                { backgroundColor: level.bgColor }
+              ]}
+              onPress={() => setSelectedLevel(level.id)}
+              activeOpacity={0.7}
+            >
+              <View style={styles.iconContainer}>
+                <View style={[styles.iconCircle, { backgroundColor: level.color }]}>
+                  <Icon size={24} color="#FFFFFF" />
+                </View>
+                <View style={[styles.multiplierBadge, { backgroundColor: level.color }]}>
+                  <Text style={styles.multiplierText}>{level.multiplier}</Text>
+                </View>
+              </View>
+              <Text style={[styles.levelTitle, { color: level.color }]}>{level.title}</Text>
+              <Text style={styles.levelDescription}>{level.description}</Text>
+              {selectedLevel === level.id && (
+                <View style={[styles.selectedIndicator, { backgroundColor: level.color }]}>
+                  <Text style={styles.checkmark}>✓</Text>
+                </View>
+              )}
+            </TouchableOpacity>
               );
-            })}
-          </View>
-        </ScrollView>
-        <TouchableOpacity
-          style={[styles.nextButton, !selectedLevel && styles.nextButtonDisabled]}
-          onPress={handleNext}
-          disabled={!selectedLevel}
-        >
-          <Text style={[styles.nextButtonText, !selectedLevel && styles.nextButtonTextDisabled]}>
-            Continue
-          </Text>
-        </TouchableOpacity>
-      </View>
+          })}
+        </View>
+      </ScrollView>
+      <TouchableOpacity
+        style={[styles.nextButton, !selectedLevel && styles.nextButtonDisabled]}
+        onPress={handleNext}
+        disabled={!selectedLevel}
+      >
+        <Text style={[styles.nextButtonText, !selectedLevel && styles.nextButtonTextDisabled]}>
+          Continue
+        </Text>
+      </TouchableOpacity>
+    </View>
     </OnboardingLayout>
   );
 }
@@ -156,6 +154,7 @@ const styles = StyleSheet.create({
     color: '#1E293B',
     textAlign: 'center',
     marginBottom: 8,
+    marginTop: 18,
   },
   subtitle: {
     fontSize: 16,
@@ -243,5 +242,11 @@ const styles = StyleSheet.create({
   },
   nextButtonTextDisabled: {
     color: '#94A3B8',
+  },
+  absoluteBackButton: {
+    position: 'absolute',
+    top: -23,
+    left: 14,
+    zIndex: 10,
   },
 });
