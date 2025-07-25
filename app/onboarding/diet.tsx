@@ -47,7 +47,7 @@ export default function DietScreen() {
       await updateUserData(updatedData);
       if (userData) {
         router.replace('/(tabs)');
-      } else {
+    } else {
         router.replace('/onboarding/createAccount');
       }
     } catch (error) {
@@ -81,14 +81,9 @@ export default function DietScreen() {
 
   return (
     <OnboardingLayout>
+      <BackButton color="#64748B" style={styles.absoluteBackButton} />
       <OnboardingProgressBar step={9} totalSteps={9} />
       <View style={styles.innerContent}>
-        <View style={styles.header}>
-          <BackButton color="#64748B" style={styles.backButton} />
-          <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
-            <Text style={styles.skipText}>Skip</Text>
-          </TouchableOpacity>
-        </View>
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <Text style={styles.title}>What's your diet preference?</Text>
           <Text style={styles.subtitle}>We'll suggest meals that match your lifestyle</Text>
@@ -96,38 +91,38 @@ export default function DietScreen() {
             {dietOptions.map((diet) => {
               const isSelected = selectedDiet === diet.id;
               return (
-                <TouchableOpacity
-                  key={diet.id}
-                  style={[
+            <TouchableOpacity
+              key={diet.id}
+              style={[
                     styles.card,
                     isSelected
                       ? { borderColor: diet.color, backgroundColor: `${diet.color}22`, shadowColor: diet.color, shadowOpacity: 0.18, elevation: 6 }
                       : { borderColor: '#E2E8F0', backgroundColor: '#FFFFFF', shadowColor: '#000', shadowOpacity: 0.08, elevation: 2 },
-                  ]}
+              ]}
                   onPress={() => handleSelect(diet.id)}
                   activeOpacity={0.85}
                   disabled={isLoading}
-                >
+            >
                   <View style={[styles.emojiCircle, { backgroundColor: isSelected ? diet.color : '#F8FAFC' }]}> 
                     <Text style={styles.emoji}>{diet.emoji}</Text>
                   </View>
                   <Text style={[styles.cardTitle, isSelected && { color: diet.color }]}>{diet.title}</Text>
                   <Text style={styles.cardDesc}>{diet.description}</Text>
-                </TouchableOpacity>
+            </TouchableOpacity>
               );
             })}
           </View>
-        </ScrollView>
-        <TouchableOpacity
+      </ScrollView>
+      <TouchableOpacity
           style={[styles.nextButton, (!selectedDiet || isLoading) && styles.nextButtonDisabled]}
-          onPress={handleNext}
+        onPress={handleNext}
           disabled={!selectedDiet || isLoading}
-        >
+      >
           <Text style={[styles.nextButtonText, (!selectedDiet || isLoading) && styles.nextButtonTextDisabled]}>
             {isLoading ? 'Completing...' : 'Complete Onboarding'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+        </Text>
+      </TouchableOpacity>
+    </View>
     </OnboardingLayout>
   );
 }
@@ -190,6 +185,7 @@ const styles = StyleSheet.create({
     color: '#1E293B',
     textAlign: 'center',
     marginBottom: 8,
+    marginTop: 18,
   },
   subtitle: {
     fontSize: 16,
@@ -264,4 +260,11 @@ const styles = StyleSheet.create({
   nextButtonTextDisabled: {
     color: '#94A3B8',
   },
+  absoluteBackButton: {
+    position: 'absolute',
+    top: -23,
+    left: 15,
+    zIndex: 10,
+  },
+  
 });

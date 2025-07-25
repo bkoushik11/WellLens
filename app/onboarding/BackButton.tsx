@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
   button: {
     padding: 0,
     marginRight: 0,
+    marginTop: 27,
+    marginLeft: 2,
   },
   circle: {
     width: 40,
