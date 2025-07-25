@@ -217,10 +217,10 @@ export function useUserData() {
     }
   };
 
-  return { 
-    userData, 
+  return {
+    userData,
     updateUserData, 
-    isLoading, 
+    isLoading,
     error,
     refetch: fetchUserData,
     // Export validation constants for use in components
