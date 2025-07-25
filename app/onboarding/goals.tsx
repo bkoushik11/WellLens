@@ -32,51 +32,51 @@ export default function GoalsScreen() {
 
   return (
     <OnboardingLayout>
+      <BackButton color="#64748B" style={styles.absoluteBackButton} />
       <OnboardingProgressBar step={7} totalSteps={9} />
       <View style={styles.innerContent}>
-        <View style={styles.header}>
-          <BackButton color="#64748B" style={styles.backButton} />
-        </View>
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
-          <Text style={styles.title}>What's your health goal?</Text>
-          <Text style={styles.subtitle}>Choose your primary wellness objective</Text>
-          <View style={styles.goalsContainer}>
-            {goals.map((goal) => {
-              const Icon = goal.icon;
-              return (
-                <TouchableOpacity
-                  key={goal.id}
-                  style={[
-                    styles.goalCard,
-                    selectedGoal === goal.id && styles.goalCardSelected,
-                    { backgroundColor: goal.bgColor }
-                  ]}
-                  onPress={() => setSelectedGoal(goal.id)}
-                  activeOpacity={0.7}
-                >
-                  <View style={[styles.iconContainer, { backgroundColor: goal.color }]}> 
-                    <Icon size={24} color="#FFFFFF" />
-                  </View>
+        <Text style={styles.title}>What's your health goal?</Text>
+        <Text style={styles.subtitle}>Choose your primary wellness objective</Text>
+        <View style={styles.goalsContainer}>
+          {goals.map((goal) => {
+            const Icon = goal.icon;
+            return (
+              <TouchableOpacity
+                key={goal.id}
+                style={[
+                  styles.goalCard,
+                  selectedGoal === goal.id && styles.goalCardSelected,
+                  { backgroundColor: goal.bgColor, flexDirection: 'row', alignItems: 'center' }
+                ]}
+                onPress={() => setSelectedGoal(goal.id)}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.iconContainer, { backgroundColor: goal.color, marginRight: 12 }]}> 
+                  <Icon size={24} color="#FFFFFF" />
+                </View>
+                <View style={{ flex: 1 }}>
                   <Text style={[styles.goalTitle, { color: goal.color }]}>{goal.title}</Text>
                   <Text style={styles.goalDescription}>{goal.description}</Text>
                   {selectedGoal === goal.id && (
                     <View style={[styles.selectedIndicator, { backgroundColor: goal.color }]} />
                   )}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </ScrollView>
-        <TouchableOpacity
-          style={[styles.nextButton, !selectedGoal && styles.nextButtonDisabled]}
-          onPress={handleNext}
-          disabled={!selectedGoal}
-        >
-          <Text style={[styles.nextButtonText, !selectedGoal && styles.nextButtonTextDisabled]}>
-            Continue
-          </Text>
-        </TouchableOpacity>
-      </View>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </ScrollView>
+      <TouchableOpacity
+        style={[styles.nextButton, !selectedGoal && styles.nextButtonDisabled]}
+        onPress={handleNext}
+        disabled={!selectedGoal}
+      >
+        <Text style={[styles.nextButtonText, !selectedGoal && styles.nextButtonTextDisabled]}>
+          Continue
+        </Text>
+      </TouchableOpacity>
+    </View>
     </OnboardingLayout>
   );
 }
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     color: '#1E293B',
     textAlign: 'center',
     marginBottom: 8,
+    marginTop: 24,
   },
   subtitle: {
     fontSize: 16,
@@ -196,5 +197,11 @@ const styles = StyleSheet.create({
   },
   nextButtonTextDisabled: {
     color: '#94A3B8',
+  },
+  absoluteBackButton: {
+    position: 'absolute',
+    top: -22,
+    left: 14,
+    zIndex: 10,
   },
 });
